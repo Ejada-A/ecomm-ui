@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand & CTAs */
+  --color-primary: #163EB8;
+  --color-primary-hover: #102d87;
+  
+  /* Text & Structure */
+  --color-text-main: #0D1C38;
+  --color-text-body: #475467;
+  --color-text-muted: #667085;
+  
+  /* Badges & Accents */
+  --color-success: #005A30;
+  --color-badge-green-bg: #E8F4ED;
+  --color-badge-blue-bg: #E1F3F9;
+  
+  /* UI Containers */
+  --color-surface: #FFFFFF;
+  --color-bg-subtle: #F3F5F8;
+  --color-border: #C5CFDA;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-text-body bg-bg-subtle antialiased;
+  }
+}
+
+@layer utilities {
+  .glassmorphism {
+    @apply backdrop-blur-md border-b shadow-sm;
+    background-color: rgba(255, 255, 255, 0.8); /* bg-surface/80 */
+    border-color: rgba(197, 207, 218, 0.3); /* border-border/30 */
+  }
+}
