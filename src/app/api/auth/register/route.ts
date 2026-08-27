@@ -9,6 +9,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Email, password, and name are required' }, { status: 400 });
     }
 
+    if (typeof password !== 'string' || password.length < 8) {
+      return NextResponse.json({ success: false, error: 'Password must be at least 8 characters' }, { status: 400 });
+    }
+
     const authServiceUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:5001';
     
     // Add timeout to prevent hanging connections (e.g. in prod)

@@ -5,6 +5,16 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { customerName, customerEmail, shippingAddress, items, userId } = body;
 
+    if (!Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ success: false, error: 'Order must contain at least one item' }, { status: 400 });
+    }
+
+    for (const item of items) {
+      if (!Number.isInteger(item?.quantity) || item.quantity <= 0) {
+        return NextResponse.json({ success: false, error: 'Item quantity must be a positive integer' }, { status: 400 });
+      }
+    }
+
     const orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://localhost:5003';
     const res = await fetch(`${orderServiceUrl}/orders`, {
       method: 'POST',

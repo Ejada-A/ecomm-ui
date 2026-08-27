@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
+import { verifyAdmin } from '@/lib/auth';
 
 export async function POST() {
   try {
+    const auth = await verifyAdmin();
+    if (!auth.ok) return auth.response;
+
     const productServiceUrl = process.env.PRODUCT_SERVICE_URL || 'http://localhost:5002';
     const res = await fetch(`${productServiceUrl}/seed`, {
       method: 'POST',

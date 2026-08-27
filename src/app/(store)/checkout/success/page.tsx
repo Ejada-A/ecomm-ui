@@ -22,9 +22,8 @@ function SuccessContent() {
       hasProcessedRef.current = true;
       clearCart();
       
-      // In a real production app, you would verify the session status 
-      // with your backend here, or use a Stripe Webhook to mark the order paid.
-      // For this tutorial, we will trust the redirect.
+      // The backend (/api/orders/confirm) verifies this session with Stripe
+      // before marking the order as paid.
       fetch('/api/orders/confirm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

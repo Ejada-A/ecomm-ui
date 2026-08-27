@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { verifyAdmin } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -16,6 +17,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const auth = await verifyAdmin();
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const productServiceUrl = process.env.PRODUCT_SERVICE_URL || 'http://localhost:5002';
     const res = await fetch(`${productServiceUrl}/products`, {

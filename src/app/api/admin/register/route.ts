@@ -1,12 +1,20 @@
 import { NextResponse } from 'next/server';
+import { verifyAdmin } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
+    const auth = await verifyAdmin();
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const { email, password, name } = body;
 
     if (!email || !password || !name) {
       return NextResponse.json({ success: false, error: 'Email, password, and name are required' }, { status: 400 });
+    }
+
+    if (typeof password !== 'string' || password.length < 8) {
+      return NextResponse.json({ success: false, error: 'Password must be at least 8 characters' }, { status: 400 });
     }
 
     const authServiceUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:5001';
