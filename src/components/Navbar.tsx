@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingCart, User, Search, Menu } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
@@ -17,8 +18,15 @@ export default function Navbar() {
             <button className="lg:hidden p-2 text-text-muted hover:text-text-main transition-colors">
               <Menu className="h-6 w-6" />
             </button>
-            <Link href="/" className="text-2xl font-black tracking-tighter text-primary flex items-center gap-2">
-              <span className="bg-primary text-surface px-2 py-1 rounded-lg">E</span>jadaStore
+            <Link href="/" className="flex items-center group">
+              <Image 
+                src="/logoTransparent.png" 
+                alt="EjadaStore Logo" 
+                width={150} 
+                height={50} 
+                className="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                priority
+              />
             </Link>
           </div>
 

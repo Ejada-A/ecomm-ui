@@ -1,6 +1,8 @@
 import ProductCard from '@/components/ProductCard';
 import { ArrowRight } from 'lucide-react';
 
+import Image from 'next/image';
+
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
@@ -11,7 +13,7 @@ export default async function Home() {
     const res = await fetch(`${productServiceUrl}/products`, { cache: 'no-store' });
     const data = await res.json();
     if (data.success) {
-      products = data.products;
+      products = data.products.filter((p: any) => p.imageUrl && p.imageUrl.trim() !== '');
     }
   } catch (err) {
     console.error('Failed to fetch products on Home page:', err);
@@ -19,27 +21,40 @@ export default async function Home() {
 
   return (
     <div className="bg-bg-subtle min-h-screen">
-      {/* Premium Hero Section */}
-      <div className="relative pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-badge-blue to-surface -z-10" />
-        <div className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-surface shadow-xl shadow-primary/5 ring-1 ring-border/20 sm:-mr-80 lg:-mr-96" />
+      {/* Hero Section with Custom Image and Transparent Logo Overlay */}
+      <div className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/heroTest.jpeg"
+            alt="Hero Background"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          {/* Subtle dark gradient overlay to make the logo and text pop */}
+          <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/60 to-transparent" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-text-main leading-[1.1]">
-              Elevate Your <span className="text-primary">Lifestyle</span>
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl text-text-body leading-relaxed max-w-xl">
-              Discover a curated collection of premium products designed to enhance your everyday experience. Quality meets aesthetics.
-            </p>
-            <div className="mt-10 flex items-center gap-x-6">
-              <a href="#products" className="rounded-full bg-primary px-8 py-4 text-sm font-bold text-surface shadow-lg shadow-primary/20 hover:bg-primary-hover hover:scale-105 transition-all flex items-center gap-2">
-                Shop Collection <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-text-main hover:text-primary transition-colors">
-                View Lookbook <span aria-hidden="true">→</span>
-              </a>
-            </div>
+        {/* Overlay Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 max-w-4xl mx-auto mt-10">
+          <Image
+            src="/ejada_logo_bilingual_white.png"
+            alt="EjadaStore Transparent Logo"
+            width={400}
+            height={150}
+            className="w-full max-w-xs md:max-w-md h-auto drop-shadow-2xl -mb-16 md:-mb-32"
+            priority
+          />
+          
+          <h2 className="text-xl sm:text-3xl font-bold tracking-[0.2em] text-surface uppercase drop-shadow-md">
+            Cloud Departments Interns
+          </h2>
+          
+          <div className="mt-8 flex items-center gap-x-6">
+            <a href="#products" className="rounded-full bg-primary px-8 py-4 text-sm font-bold text-surface shadow-lg hover:bg-primary-hover hover:scale-105 transition-all flex items-center gap-2 border border-surface/20">
+              Shop Collection <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </div>
