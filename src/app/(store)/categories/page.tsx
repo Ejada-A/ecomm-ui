@@ -11,7 +11,7 @@ export default async function CategoriesPage() {
     const res = await fetch(`${productServiceUrl}/categories`, { cache: 'no-store' });
     const data = await res.json();
     if (data.success) {
-      categories = data.categories;
+      categories = data.categories.filter((cat: any) => /^[a-zA-Z\s]+$/.test(cat.name));
     }
   } catch (err) {
     console.error('Failed to fetch categories:', err);

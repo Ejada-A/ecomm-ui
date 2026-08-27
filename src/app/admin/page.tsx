@@ -1,6 +1,14 @@
 import { ShoppingBag, Users, DollarSign, Activity } from 'lucide-react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+  const cookieStore = await cookies();
+  if (!cookieStore.has('admin_token')) {
+    redirect('/admin/login');
+  }
+  redirect('/admin/products');
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

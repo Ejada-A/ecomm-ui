@@ -33,8 +33,9 @@ export default function RegisterPage() {
       } else {
         setError(data.error || 'Failed to register');
       }
-    } catch (err) {
-      setError('Something went wrong. Please try again.');
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      setError(err.message || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }

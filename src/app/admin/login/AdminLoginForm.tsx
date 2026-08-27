@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { adminLoginAction } from '@/actions/auth';
 
-export default function LoginPage() {
-  const router = useRouter();
+export default function AdminLoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,22 +15,16 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        window.location.href = '/';
-      } else {
-        setError(data.error || 'Failed to login');
+      const res = await adminLoginAction(email, password);
+      if (res && res.error) {
+        setError(res.error);
+        setLoading(false);
       }
     } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Something went wrong. Please try again.');
-    } finally {
+      if (err?.message?.includes('NEXT_REDIRECT') || err?.digest?.startsWith('NEXT_REDIRECT')) {
+        throw err;
+      }
+      setError('Something went wrong. Please try again.');
       setLoading(false);
     }
   };
@@ -41,14 +33,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-bg-subtle flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-black tracking-tight text-text-main">
-          Sign in to your account
+          Admin Portal Access
         </h2>
-        <p className="mt-2 text-center text-sm text-text-muted">
-          Or{' '}
-          <Link href="/register" className="font-bold text-primary hover:text-primary-hover">
-            create a new account
-          </Link>
-        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -61,12 +47,11 @@ export default function LoginPage() {
             )}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-text-main">
-                Email address
+                Admin Email
               </label>
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
                   type="email"
                   required
                   value={email}
@@ -83,7 +68,6 @@ export default function LoginPage() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
                   type="password"
                   required
                   value={password}
@@ -97,9 +81,9 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-primary/20 text-sm font-bold text-surface bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:transform-none"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-primary/20 text-sm font-bold text-surface bg-primary hover:bg-primary-hover transition-all disabled:opacity-70 disabled:transform-none"
               >
-                {loading ? 'Signing in...' : 'Sign in'}
+                {loading ? 'Authenticating...' : 'Sign In'}
               </button>
             </div>
           </form>

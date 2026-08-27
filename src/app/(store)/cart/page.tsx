@@ -9,23 +9,21 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-bg-subtle min-h-screen pt-32 pb-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-black tracking-tight text-text-main mb-10">Your Cart</h1>
-          
-          <div className="bg-surface rounded-3xl p-12 sm:p-20 text-center border border-border/50 shadow-sm flex flex-col items-center justify-center">
-            <div className="bg-badge-blue p-6 rounded-full text-primary mb-6">
-              <ShoppingBag className="w-12 h-12" />
+      <div className="bg-bg-subtle min-h-screen pt-24 sm:pt-32 pb-16">
+        <div className="max-w-2xl mx-auto px-4 text-center">
+          <div className="bg-surface rounded-3xl p-8 sm:p-14 border border-border/40 shadow-xs flex flex-col items-center justify-center">
+            <div className="w-14 h-14 bg-badge-blue rounded-full text-primary flex items-center justify-center mb-4">
+              <ShoppingBag className="w-7 h-7" />
             </div>
-            <h2 className="text-3xl font-black text-text-main mb-4">It's empty in here</h2>
-            <p className="text-text-body mb-10 text-lg max-w-md mx-auto">
-              Looks like you haven't added anything to your cart yet. Let's find some premium items for you.
+            <h2 className="text-xl sm:text-2xl font-bold text-text-main mb-2">Your cart is empty</h2>
+            <p className="text-text-muted text-sm max-w-sm mb-6">
+              Looks like you haven't added anything to your cart yet.
             </p>
             <Link
-              href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 border border-transparent text-lg font-bold rounded-full shadow-lg text-surface bg-primary hover:bg-primary-hover hover:-translate-y-1 transition-all duration-300"
+              href="/products"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-transparent text-sm font-bold rounded-xl shadow-md text-surface bg-primary hover:bg-primary-hover transition-all"
             >
-              Start Shopping <ArrowRight className="w-5 h-5" />
+              Start Shopping <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -34,94 +32,114 @@ export default function CartPage() {
   }
 
   return (
-    <div className="bg-bg-subtle min-h-screen pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-black tracking-tight text-text-main mb-10">Your Cart</h1>
+    <div className="bg-bg-subtle min-h-screen pt-24 sm:pt-32 pb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Minimal Header */}
+        <div className="flex items-center justify-between border-b border-border/40 pb-4 mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold text-text-main">Shopping Cart ({items.reduce((acc, i) => acc + i.quantity, 0)})</h1>
+          <Link href="/products" className="text-xs sm:text-sm font-semibold text-primary hover:underline">
+            Continue Shopping
+          </Link>
+        </div>
 
-        <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start">
-          <div className="lg:col-span-8">
-            <ul className="border-t border-border/50 divide-y divide-border/50">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-x-10 lg:items-start">
+          
+          {/* Cart Item List */}
+          <div className="lg:col-span-7 xl:col-span-8">
+            <ul className="divide-y divide-border/40">
               {items.map((item) => (
-                <li key={item._id} className="flex py-6 sm:py-10">
-                  <div className="flex-shrink-0">
+                <li key={item._id} className="py-4 sm:py-6 flex gap-4 items-center">
+                  
+                  {/* Compact Product Image */}
+                  <Link href={`/products/${item._id}`} className="shrink-0">
                     <img
                       src={item.imageUrl}
                       alt={item.name}
-                      className="w-24 h-24 rounded-2xl object-contain object-center sm:w-32 sm:h-32 bg-surface p-2 border border-border/50"
+                      className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl object-contain bg-surface p-1.5 border border-border/40"
                     />
-                  </div>
+                  </Link>
 
-                  <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                    <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                      <div>
-                        <div className="flex justify-between">
-                          <h3 className="text-lg font-bold text-text-main">
-                            <Link href={`/products/${item._id}`} className="hover:text-primary">
-                              {item.name}
-                            </Link>
-                          </h3>
-                        </div>
-                        <p className="mt-1 text-sm font-medium text-text-muted">Premium Collection</p>
-                        <p className="mt-2 text-xl font-black text-text-main">${item.price.toFixed(2)}</p>
+                  {/* Details Container */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch">
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <Link href={`/products/${item._id}`} className="text-xs sm:text-base font-bold text-text-main truncate hover:text-primary transition-colors">
+                          {item.name}
+                        </Link>
+                        <button
+                          onClick={() => removeFromCart(item._id)}
+                          className="text-text-muted hover:text-red-500 p-1 transition-colors shrink-0"
+                          title="Remove item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
-
-                      <div className="mt-4 sm:mt-0 sm:pr-9 flex items-center gap-4">
-                        <div className="flex items-center border border-border/50 rounded-lg bg-surface">
-                          <button
-                            onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                            className="p-2 text-text-muted hover:text-primary transition-colors"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="px-4 font-semibold text-text-main">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                            className="p-2 text-text-muted hover:text-primary transition-colors"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
-                        </div>
-                        <div className="absolute top-0 right-0 sm:top-auto sm:right-auto">
-                          <button
-                            onClick={() => removeFromCart(item._id)}
-                            className="-m-2 p-2 inline-flex text-text-muted hover:text-red-500 transition-colors"
-                          >
-                            <span className="sr-only">Remove</span>
-                            <Trash2 className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </div>
+                      <p className="text-[11px] sm:text-xs text-text-muted font-medium mt-0.5">
+                        ${item.price.toFixed(2)} each
+                      </p>
                     </div>
+
+                    {/* Quantity Stepper & Subtotal Row */}
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="inline-flex items-center border border-border/60 rounded-lg bg-surface h-8">
+                        <button
+                          onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                          className="px-2.5 h-full text-text-muted hover:text-text-main flex items-center justify-center transition-colors"
+                        >
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="px-2 text-xs font-bold text-text-main min-w-[20px] text-center">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                          className="px-2.5 h-full text-text-muted hover:text-text-main flex items-center justify-center transition-colors"
+                        >
+                          <Plus className="w-3 h-3" />
+                        </button>
+                      </div>
+
+                      <span className="text-xs sm:text-sm font-bold text-text-main">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
+                    </div>
+
                   </div>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Order summary */}
-          <section className="mt-16 bg-surface rounded-3xl px-6 py-8 sm:p-10 lg:p-12 lg:mt-0 lg:col-span-4 border border-border/50 shadow-sm">
-            <h2 className="text-2xl font-bold text-text-main">Order summary</h2>
+          {/* Minimal Shopify Order Summary */}
+          <section className="mt-8 lg:mt-0 lg:col-span-5 xl:col-span-4 bg-surface rounded-2xl p-5 sm:p-6 border border-border/40 shadow-xs">
+            <h2 className="text-base sm:text-lg font-bold text-text-main mb-4 border-b border-border/40 pb-3">Order Summary</h2>
 
-            <dl className="mt-8 space-y-6 text-sm font-medium text-text-body">
+            <div className="space-y-3 text-xs sm:text-sm text-text-body font-medium">
               <div className="flex items-center justify-between">
-                <dt>Subtotal</dt>
-                <dd className="text-text-main font-semibold">${totalPrice.toFixed(2)}</dd>
+                <span className="text-text-muted">Subtotal</span>
+                <span className="text-text-main font-semibold">${totalPrice.toFixed(2)}</span>
               </div>
-              <div className="flex items-center justify-between border-t border-border/50 pt-6">
-                <dt className="text-base font-bold text-text-main">Order total</dt>
-                <dd className="text-2xl font-black text-text-main">${totalPrice.toFixed(2)}</dd>
+              <div className="flex items-center justify-between">
+                <span className="text-text-muted">Shipping</span>
+                <span className="text-success font-semibold text-xs">Calculated at checkout</span>
               </div>
-            </dl>
+              <div className="flex items-center justify-between border-t border-border/40 pt-3">
+                <span className="text-sm sm:text-base font-bold text-text-main">Total</span>
+                <span className="text-base sm:text-lg font-black text-text-main">${totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
 
-            <div className="mt-8">
+            <div className="mt-6">
               <Link
                 href="/checkout"
-                className="w-full bg-primary border border-transparent rounded-2xl shadow-lg shadow-primary/20 py-4 px-4 text-base font-bold text-surface hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary flex items-center justify-center transition-all hover:-translate-y-1"
+                className="w-full bg-primary text-surface font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-primary-hover transition-all flex items-center justify-center text-sm gap-2"
               >
-                Checkout
+                Checkout <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </section>
+
         </div>
       </div>
     </div>

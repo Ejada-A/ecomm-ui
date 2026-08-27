@@ -72,7 +72,7 @@ export default async function Home() {
         </div>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8">
             {products.slice(0, 10).map((product: any) => (
               <ProductCard key={product._id?.toString()} product={product} />
             ))}

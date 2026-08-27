@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, Lock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { getUserData } from '@/actions/auth';
+import { useEffect } from 'react';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -20,6 +21,23 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    async function loadUser() {
+      const user = await getUserData();
+      if (user) {
+        const nameParts = (user.name || '').split(' ');
+        setFormData(prev => ({
+          ...prev,
+          firstName: prev.firstName || nameParts[0] || '',
+          lastName: prev.lastName || nameParts.slice(1).join(' ') || '',
+          email: prev.email || user.email || '',
+          address: prev.address || user.address || '',
+        }));
+      }
+    }
+    loadUser();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,10 +86,6 @@ export default function CheckoutPage() {
         
         <div className="flex items-center justify-between mb-10">
           <h1 className="text-4xl font-black tracking-tight text-text-main">Secure Checkout</h1>
-          <div className="flex items-center text-success gap-2 bg-badge-green px-4 py-2 rounded-full border border-success/20">
-            <Lock className="w-4 h-4" />
-            <span className="text-sm font-bold">256-bit Encrypted</span>
-          </div>
         </div>
 
         <div className="bg-surface rounded-3xl border border-border/50 shadow-sm overflow-hidden mb-8">

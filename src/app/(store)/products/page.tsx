@@ -27,7 +27,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     if (productsData.success) {
       products = productsData.products.filter((p: any) => p.imageUrl && p.imageUrl.trim() !== '');
     }
-    if (categoriesData.success) categories = categoriesData.categories;
+    if (categoriesData.success) {
+      categories = categoriesData.categories.filter((cat: any) => /^[a-zA-Z\s]+$/.test(cat.name));
+    }
   } catch (err) {
     console.error('Failed to fetch data:', err);
   }
@@ -104,7 +106,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
         {paginatedProducts.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-10">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8 mt-10">
               {paginatedProducts.map((product: any) => (
                 <ProductCard key={product._id?.toString()} product={product} />
               ))}

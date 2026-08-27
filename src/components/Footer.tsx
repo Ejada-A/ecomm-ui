@@ -53,21 +53,21 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Social Links (Preserved from Ejada styles) */}
-        <div className="flex justify-center items-center gap-12 text-sm font-bold tracking-widest uppercase mb-16">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-12 text-xs sm:text-sm font-bold tracking-widest uppercase mb-12 sm:mb-16">
           <a href="https://www.facebook.com/ejada.systems" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">
             Facebook
           </a>
-          <span className="text-white/30">/</span>
+          <span className="text-white/30 hidden sm:inline">/</span>
           <a href="https://x.com/ejada_systems" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">
             Platform X
           </a>
-          <span className="text-white/30">/</span>
+          <span className="text-white/30 hidden sm:inline">/</span>
           <a href="https://www.linkedin.com/company/ejada/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">
             LinkedIn
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-20 border-t border-white/10 pt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12 sm:mb-20 border-t border-white/10 pt-12 sm:pt-16">
           {/* Column 1: Brand */}
           <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <a href="https://www.ejada.com/" target="_blank" rel="noopener noreferrer" className="inline-block">
@@ -150,7 +150,7 @@ export default function Footer() {
 
         {/* Bottom Section (Preserved from Ejada styles) */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-bold text-white/80">
-          <p>
+          <p className="text-center md:text-left">
             &copy; 2026EJADA SYSTEMS All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-6 uppercase tracking-wider">
