@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-01-27.acacia' as any,
-});
-
 export async function POST(request: Request) {
   try {
     const { orderId, sessionId } = await request.json();
@@ -12,6 +8,14 @@ export async function POST(request: Request) {
     if (!orderId || !sessionId) {
       return NextResponse.json({ success: false, error: 'Missing parameters' }, { status: 400 });
     }
+
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) {
+      return NextResponse.json({ success: false, error: 'Payment provider not configured' }, { status: 500 });
+    }
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: '2025-01-27.acacia' as any,
+    });
 
     // Verify the checkout session with Stripe before trusting the redirect.
     let session: Stripe.Checkout.Session;
